@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8f5">
+  <title>Pocketwise — your money, in focus</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#overview"><span class="brand-mark">▥</span> pocketwise<span>.</span></a>
+      <p class="side-label">WORKSPACE</p>
+      <nav>
+        <a class="nav-link active" href="#overview">◫ <span>Overview</span></a>
+        <a class="nav-link" href="#transactions">↔ <span>Transactions</span></a>
+        <a class="nav-link" href="#budgets">◷ <span>Budgets</span></a>
+        <a class="nav-link" href="#accounts">▤ <span>Accounts</span></a>
+        <a class="nav-link" href="#reports">▥ <span>Reports</span></a>
+      </nav>
+      <div class="side-bottom">
+        <div class="privacy"><span>✳</span><strong>Your money stays yours.</strong><p>Your data is saved only on this device.</p></div>
+        <div class="profile"><span class="avatar">S</span><div><strong>Sam Taylor</strong><small>Personal account</small></div></div>
+      </div>
+    </aside>
+    <main id="overview">
+      <header class="topbar">
+        <button class="menu" id="menuButton" aria-label="Open navigation">☰</button>
+        <div class="crumb">My workspace <span>/</span> <strong>Overview</strong></div>
+        <div class="top-actions">
+          <label class="month-wrap"><span class="sr-only">Select month</span><select id="monthSelect"></select></label>
+          <button class="icon-button" id="importButton" title="Import CSV" aria-label="Import transactions">↑</button>
+          <button class="icon-button" id="exportButton" title="Export CSV" aria-label="Export transactions">↓</button>
+          <button class="primary-button" id="addButton">＋ Add transaction</button>
+        </div>
+      </header>
+      <div class="content">
+        <section class="welcome">
+          <div><p class="eyebrow"><i></i> YOUR FINANCES AT A GLANCE</p><h1>Good morning, Sam <span>✳</span></h1><p class="subtitle">Here’s your money story for <strong id="welcomeMonth"></strong>.</p></div>
+          <button class="quick-button" id="quickButton">＋ Quick add <kbd>Q</kbd></button>
+        </section>
+        <section class="summary-grid">
+          <article class="summary balance"><div class="summary-head">Total balance <span>◉</span></div><strong id="totalBalance"></strong><p><b>↗ 4.8%</b> vs. last month</p></article>
+          <article class="summary"><div class="summary-head">Income <span class="green-icon">↙</span></div><strong id="incomeTotal"></strong><p><b>↗ 8.2%</b> vs. last month</p></article>
+          <article class="summary"><div class="summary-head">Expenses <span class="orange-icon">↗</span></div><strong id="expenseTotal"></strong><p><b class="orange">↘ 2.1%</b> vs. last month</p></article>
+          <article class="summary"><div class="summary-head">Net savings <span class="purple-icon">✳</span></div><strong id="savingsTotal"></strong><p><b id="savingsRate">0% saved</b> of your income</p></article>
+        </section>
+        <section class="two-col" id="reports">
+          <article class="panel">
+            <div class="panel-head"><div><h2>Cash flow</h2><p>Your income and expenses over time</p></div><div class="legend"><span><i></i>Income</span><span><i></i>Expenses</span></div></div>
+            <div class="cashflow" id="cashflowChart"></div>
+            <div class="chart-note">You saved <strong id="chartSavings"></strong> more than you spent this month.</div>
+          </article>
+          <article class="panel">
+            <div class="panel-head"><div><h2>Spending breakdown</h2><p>Where your money went</p></div><span class="month-badge" id="breakdownMonth"></span></div>
+            <div class="breakdown"><div class="donut" id="donut"><div><small>Total spent</small><strong id="donutTotal"></strong></div></div><div class="legend-list" id="categoryLegend"></div></div>
+          </article>
+        </section>
+        <section class="two-col lower">
+          <article class="panel" id="transactions">
+            <div class="panel-head"><div><h2>Recent transactions</h2><p>Your latest money moves</p></div><button class="text-button" id="viewAll">View all →</button></div>
+            <div class="toolbar"><input id="searchInput" type="search" placeholder="⌕  Search transactions..." aria-label="Search transactions"><select id="categoryFilter" aria-label="Filter by category"></select></div>
+            <div class="table-wrap"><table><thead><tr><th>TRANSACTION</th><th>CATEGORY</th><th>DATE</th><th>ACCOUNT</th><th class="right">AMOUNT</th><th></th></tr></thead><tbody id="transactionRows"></tbody></table>
+              <div class="empty" id="emptyState" hidden><strong>No transactions found</strong><p>Try changing your search or add your first transaction.</p></div>
+            </div>
+          </article>
+          <article class="panel" id="budgets">
+            <div class="panel-head"><div><h2>Monthly budgets</h2><p>Keep your spending on track</p></div><button class="text-button" id="editBudgets" aria-label="Edit budgets">···</button></div>
+            <div class="budget-total"><div><small>Total monthly budget</small><strong id="budgetTotal"></strong></div><span id="budgetRemaining"></span></div>
+            <div class="budget-list" id="budgetList"></div>
+            <button class="manage-button" id="manageBudgets">Manage budgets →</button>
+          </article>
+        </section>
+        <section class="panel accounts" id="accounts"><div class="panel-head"><div><h2>Your accounts</h2><p>Balances across your everyday money</p></div><span class="month-badge">3 ACCOUNTS</span></div><div class="account-list" id="accountList"></div></section>
+        <footer>Made for a little more peace of mind <span>♥</span><small>All amounts in INR · Data stored on this device</small></footer>
+      </div>
+    </main>
+  </div>
+
+  <div class="backdrop" id="transactionModal" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="transactionTitle">
+    <div class="modal-head"><div><small>QUICK ENTRY</small><h2 id="transactionTitle">Add transaction</h2></div><button class="close" data-close="transactionModal">×</button></div>
+    <form id="transactionForm">
+      <div class="type-toggle"><button type="button" class="selected" data-type="expense">− Expense</button><button type="button" data-type="income">＋ Income</button></div>
+      <label class="field">Amount<span class="amount-wrap">₹ <input id="amountInput" name="amount" type="number" min="0.01" step="0.01" placeholder="0.00" required></span></label>
+      <div class="form-row"><label class="field">Category<select id="categoryInput" name="category"></select></label><label class="field">Account<select name="account"><option>Everyday account</option><option>Cash wallet</option><option>Savings account</option></select></label></div>
+      <div class="form-row"><label class="field">Date<input name="date" id="dateInput" type="date" required></label><label class="field">Note<input name="note" maxlength="80" placeholder="What was it for?"></label></div>
+      <button class="primary-button full" type="submit">Save transaction ↗</button><p class="modal-hint">Press Enter to save · Esc to close</p>
+    </form>
+  </section></div>
+
+  <div class="backdrop" id="budgetModal" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="budgetTitle">
+    <div class="modal-head"><div><small>YOUR MONTHLY PLAN</small><h2 id="budgetTitle">Manage budgets</h2></div><button class="close" data-close="budgetModal">×</button></div>
+    <form id="budgetForm"><div class="budget-fields" id="budgetFields"></div><button class="primary-button full" type="submit">Save budgets ↗</button></form>
+  </section></div>
+
+  <div class="backdrop" id="importModal" hidden><section class="modal import-modal" role="dialog" aria-modal="true" aria-labelledby="importTitle">
+    <div class="modal-head"><div><small>BRING YOUR DATA</small><h2 id="importTitle">Import transactions</h2></div><button class="close" data-close="importModal">×</button></div>
+    <div id="importFileStep"><p class="import-description">Choose a CSV file. Your data stays in this browser.</p><label class="file-picker">Choose CSV file<input id="csvFile" type="file" accept=".csv,text/csv"></label></div>
+    <div id="importMappingStep" hidden><div class="mapping-grid" id="mappingFields"></div><div class="duplicate-row"><label><input id="keepDuplicates" type="checkbox"> Keep possible duplicates</label><span>Same date, amount and note</span></div><div class="preview-head"><strong>Preview</strong><span id="previewCount"></span></div><div class="preview-wrap"><table><thead id="previewHead"></thead><tbody id="previewBody"></tbody></table></div><div class="import-actions"><button class="text-button" id="cancelImport" type="button">Choose another file</button><button class="primary-button" id="confirmImport" type="button">Import transactions</button></div></div>
+  </section></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
